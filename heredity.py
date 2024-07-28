@@ -156,8 +156,8 @@ def joint_probability(people, one_gene, two_genes, have_trait):
         if people[person]["mother"] != None:
             # First calculate each probabilities weither his parents has one tow or none gene(s)
             if people[person]["mother"] in one_gene:
-                oddsMotherPass = 0.5 + PROBS["mutation"]
-                oddsMotherNoPass = 0.5 - PROBS["mutation"]
+                oddsMotherPass = 0.5 
+                oddsMotherNoPass = 0.5
             elif people[person]["mother"] in two_genes:
                 oddsMotherPass = 1.0 - PROBS["mutation"]
                 oddsMotherNoPass = PROBS["mutation"]
@@ -166,8 +166,8 @@ def joint_probability(people, one_gene, two_genes, have_trait):
                 oddsMotherPass = PROBS["mutation"]
                 oddsMotherNoPass = 1 - PROBS["mutation"]
             if people[person]["father"] in one_gene:
-                oddsFatherPass = 0.5 + PROBS["mutation"]
-                oddsFatherNoPass = 0.5 - PROBS["mutation"]
+                oddsFatherPass = 0.5
+                oddsFatherNoPass = 0.5
             elif people[person]["father"] in two_genes:
                     oddsFatherPass = 1.0 - PROBS["mutation"]
                     oddsFatherNoPass = PROBS["mutation"]
@@ -265,19 +265,19 @@ def normalize(probabilities):
 
     totalGene = 0
     totalTrait = 0
-    print(probabilities)
+
     for person in probabilities:
-        totalGene = 0
-        totalTrait = 0
-        for gene, prob in probabilities[person]["gene"].items():
-            totalGene += prob
-        for gene, prob in probabilities[person]["gene"].items():
-            probabilities[person]["gene"][gene] = prob/totalGene
-        for trait, prob in probabilities[person]["trait"].items():
-            totalTrait += prob
-            # print(prob)
-        for trait, prob in probabilities[person]["trait"].items():
-            probabilities[person]["trait"][trait] = prob/totalTrait
+        # Normalize gene probabilities
+        gene_probs = probabilities[person]["gene"]
+        totalGene = sum(gene_probs.values())
+        for gene in gene_probs:
+            gene_probs[gene] /= totalGene
+
+        # Normalize trait probabilities
+        trait_probs = probabilities[person]["trait"]
+        totalTrait = sum(trait_probs.values())
+        for trait in trait_probs:
+            trait_probs[trait] /= totalTrait
 
 
 if __name__ == "__main__":
